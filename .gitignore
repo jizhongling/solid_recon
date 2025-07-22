@@ -1,3 +1,16 @@
+##### This project structure ignores #####
+
+# Indirectory builds
+include/*
+plugins/*
+build/*
+install/*
+
+# macOS metadata
+.DS_Store
+
+##### C++ basic gitignore #####
+
 # Prerequisites
 *.d
 
@@ -5,17 +18,16 @@
 *.slo
 *.lo
 *.o
+
+# Auto-generated meshes
 *.obj
+*.mtl
+*.ply
+*.stl
 
 # Precompiled Headers
 *.gch
 *.pch
-
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
 
 # Compiled Dynamic libraries
 *.so
@@ -35,7 +47,120 @@
 # Executables
 *.exe
 *.out
-*.app
+*.m_app
 
-# debug information files
-*.dwo
+
+##### i g n o r i n g   I D E s #####
+
+# Remove IntelliJ idea and CLion in particular from the project scope (it is a personal stuff of each developer)
+**/.idea/
+
+# The same to vscode
+**/.vscode/*
+
+# CMake CLion style
+**/cmake-build-*/
+
+# File-based project format
+*.iws
+
+#-------------
+# vim
+
+# Swap
+[._]*.s[a-v][a-z]
+!*.svg  # comment out if you don't need vector files
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+Sessionx.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
+# /vim
+
+# --------------
+# EMACS
+
+# -*- mode: gitignore; -*-
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# network security
+/network-security.data
+# /EMACS
+#--------------
+
+
+*.bck
+
+bin/
+
+src/tests/pyjano/eicrecon_path.py
+custom_environment.sh
+
+lib/
+
+/tests
+/build
+
+src/tools/default_flags_table/__pycache__/
+
+src/tools/default_flags_table/calibrations/
+
+src/tools/default_flags_table/fieldmaps/
+
+src/examples/test_data_generator/__pycache__/
+
+.run/

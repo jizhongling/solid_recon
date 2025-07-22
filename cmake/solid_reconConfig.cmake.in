@@ -1,0 +1,29 @@
+@PACKAGE_INIT@
+
+# Can't seem to make this work with CMAKE_MODULE_PATH
+set(solid_recon_INCLUDE_DIR ${PACKAGE_PREFIX_DIR}/include)
+
+set(solid_recon_CXX_STANDARD @CMAKE_CXX_STANDARD@)
+
+include(CMakeFindDependencyMacro)
+find_dependency(Acts @Acts_VERSION@ CONFIG EXACT)
+find_dependency(ROOT @ROOT_VERSION@ CONFIG EXACT COMPONENTS Core Tree Hist RIO EG)
+find_dependency(JANA @JANA_VERSION@ CONFIG EXACT)
+find_dependency(EDM4HEP @EDM4HEP_VERSION@ CONFIG EXACT)
+find_dependency(EDM4EIC @EDM4EIC_VERSION@ CONFIG EXACT)
+find_dependency(Eigen3 @Eigen3_VERSION@ CONFIG EXACT)
+find_dependency(DD4hep @DD4hep_VERSION@ CONFIG EXACT)
+find_dependency(Microsoft.GSL @Microsoft.GSL_VERSION@ CONFIG EXACT)
+find_dependency(algorithms @algorithms_VERSION@ CONFIG EXACT)
+find_dependency(podio @podio_VERSION@ CONFIG EXACT)
+find_dependency(spdlog @spdlog_VERSION@ CONFIG EXACT)
+
+# Set the output plugin directory based on whether the user has their solid_recon_MY envar set
+if( DEFINED ENV{solid_recon_MY} )
+    set( USER_PLUGIN_OUTPUT_DIRECTORY $ENV{solid_recon_MY}/plugins )
+else()
+    set( USER_PLUGIN_OUTPUT_DIRECTORY ${PLUGIN_OUTPUT_DIRECTORY} )
+endif()
+
+# include the targets file to create the imported targets for the user
+include(${CMAKE_CURRENT_LIST_DIR}/solid_reconTargets.cmake)
