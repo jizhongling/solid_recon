@@ -20,7 +20,7 @@ A tutorial on JANA2 is available
 
 To configure, build, and install (to the `install` directory), use the following commands:
 ```bash
-cmake -B build -S . -DCMAKE_INSTALL_PREFIX=install
+cmake -B build -S . -DCMAKE_INSTALL_PREFIX=$EIC_SHELL_PREFIX
 cmake --build build
 cmake --install build
 ```
