@@ -284,7 +284,6 @@ if(CXX_COMPILER_HAS_gz)
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -gz")
 endif()
 
-add_subdirectory(src/services)
 add_subdirectory(src/algorithms)
 add_subdirectory(src/detectors)
 add_subdirectory(src/extensions)
