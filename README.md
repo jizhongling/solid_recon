@@ -1,4 +1,4 @@
-# solid_recon
+# solid_recon for testing modular structures (not compilable)
 JANA and EICrecon based reconstruction for the SoLID detector
 
 The repository contains reconstruction source code for the SoLID detector. Its function
