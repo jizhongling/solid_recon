@@ -152,7 +152,8 @@ void CalorimeterIslandCluster::init() {
 
         is_neighbour = [this](const CaloHit& h1, const CaloHit& h2) {
           // in the same sector
-          if (h1.getSector() == h2.getSector()) {
+          //if (h1.getSector() == h2.getSector()) {
+          if (false) {
             auto dist = hitsDist(h1, h2);
             return (fabs(dist.a) <= neighbourDist[0]) && (fabs(dist.b) <= neighbourDist[1]);
             // different sector, local coordinates do not work, using global coordinates

@@ -79,11 +79,11 @@ void InitPlugin(JApplication* app) {
   app->Add(new JOmniFactoryGeneratorT<CalorimeterIslandCluster_factory>(
       "FAEC_ShIslandProtoClusters", {"FAEC_ShRecHits"}, {"FAEC_ShIslandProtoClusters"},
       {
-          .sectorDist                    = 6.25 * dd4hep::cm,
+          .sectorDist                    = 6.25 * dd4hep::cm * 2 * 1.5,
           .dimScaledLocalDistXY          = {1.5, 1.5},
           .splitCluster                  = false,
           .minClusterHitEdep             = 0.0 * dd4hep::MeV,
-          .minClusterCenterEdep          = 60.0 * dd4hep::MeV,
+          .minClusterCenterEdep          = 20.0 * dd4hep::MeV,
           .transverseEnergyProfileMetric = "dimScaledLocalDistXY",
           .transverseEnergyProfileScale  = 1.,
       },
@@ -229,11 +229,11 @@ void InitPlugin(JApplication* app) {
       "FAEC_PrShIslandProtoClusters", {"FAEC_PrShRecHits"},
       {"FAEC_PrShIslandProtoClusters"},
       {
-          .sectorDist                    = 6.25 * dd4hep::cm,
+          .sectorDist                    = 6.25 * dd4hep::cm * 2 * 1.5,
           .dimScaledLocalDistXY          = {1.5, 1.5},
           .splitCluster                  = false,
           .minClusterHitEdep             = 0.0 * dd4hep::MeV,
-          .minClusterCenterEdep          = 60.0 * dd4hep::MeV,
+          .minClusterCenterEdep          = 20.0 * dd4hep::MeV,
           .transverseEnergyProfileMetric = "dimScaledLocalDistXY",
           .transverseEnergyProfileScale  = 1.,
       },
