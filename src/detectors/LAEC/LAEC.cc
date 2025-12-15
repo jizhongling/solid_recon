@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2021 - 2024, Chao Peng, Sylvester Joosten, Whitney Armstrong, David Lawrence, Friederike Bock, Wouter Deconinck, Kolja Kauder, Sebouh Paul
 
+#include <DD4hep/Detector.h>
 #include <edm4eic/EDM4eicVersion.h>
 #include <Evaluator/DD4hepUnits.h>
 #include <JANA/JApplication.h>
@@ -16,6 +17,7 @@
 #include "factories/calorimetry/CalorimeterTruthClustering_factory.h"
 #include "factories/calorimetry/CalorimeterClusterShape_factory.h"
 #include "factories/calorimetry/TrackClusterMergeSplitter_factory.h"
+#include "services/geometry/dd4hep/DD4hep_service.h"
 
 extern "C" {
 void InitPlugin(JApplication* app) {
@@ -31,6 +33,8 @@ void InitPlugin(JApplication* app) {
   decltype(CalorimeterHitDigiConfig::pedSigmaADC) LAEC_Sh_pedSigmaADC = 2.4576;
   decltype(CalorimeterHitDigiConfig::resolutionTDC) LAEC_Sh_resolutionTDC =
       10 * dd4hep::picosecond;
+  auto detector = app->GetService<DD4hep_service>()->detector();
+  double rmod = detector->constant<double>("LAEC_rmod");
   app->Add(new JOmniFactoryGeneratorT<CalorimeterHitDigi_factory>(
       "LAEC_ShRawHits", {"LAEC_ShHits"},
 #if EDM4EIC_VERSION_MAJOR >= 7
@@ -79,7 +83,7 @@ void InitPlugin(JApplication* app) {
   app->Add(new JOmniFactoryGeneratorT<CalorimeterIslandCluster_factory>(
       "LAEC_ShIslandProtoClusters", {"LAEC_ShRecHits"}, {"LAEC_ShIslandProtoClusters"},
       {
-          .sectorDist                    = 6.25 * dd4hep::cm * 2 * 1.5,
+          .sectorDist                    = rmod * 2 * 1.5,
           .dimScaledLocalDistXY          = {1.5, 1.5},
           .splitCluster                  = false,
           .minClusterHitEdep             = 0.0 * dd4hep::MeV,
@@ -229,7 +233,7 @@ void InitPlugin(JApplication* app) {
       "LAEC_PrShIslandProtoClusters", {"LAEC_PrShRecHits"},
       {"LAEC_PrShIslandProtoClusters"},
       {
-          .sectorDist                    = 6.25 * dd4hep::cm * 2 * 1.5,
+          .sectorDist                    = rmod * 2 * 1.5,
           .dimScaledLocalDistXY          = {1.5, 1.5},
           .splitCluster                  = false,
           .minClusterHitEdep             = 0.0 * dd4hep::MeV,
