@@ -87,7 +87,7 @@ eicrecon::TrackParamTruthInit::produce(const edm4hep::MCParticleCollection* mcpa
         const auto pinit = pmag * (1.0 + m_cfg.momentumSmear * m_normDist(generator));
 
         // define line surface for local position values
-        auto perigee = Acts::Surface::makeShared<Acts::PerigeeSurface>(Acts::Vector3(0,0,0));
+        auto perigee = Acts::Surface::makeShared<Acts::PerigeeSurface>(Acts::Vector3(0,0,-3500));
 
         // track particle back to transverse point-of-closest approach
         // with respect to the defined line surface
@@ -96,6 +96,7 @@ eicrecon::TrackParamTruthInit::produce(const edm4hep::MCParticleCollection* mcpa
         auto xpca = v.x + linesurface_parameter*p.x;
         auto ypca = v.y + linesurface_parameter*p.y;
         auto zpca = v.z + linesurface_parameter*p.z;
+        m_log->debug("PCA position: x = {} mm, y = {} mm, z = {} mm", xpca, ypca, zpca);
 
         Acts::Vector3 global(xpca, ypca, zpca);
         Acts::Vector3 direction(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));

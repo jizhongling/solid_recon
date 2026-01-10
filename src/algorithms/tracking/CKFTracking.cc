@@ -181,6 +181,7 @@ namespace eicrecon {
             params(Acts::eBoundTheta)  = track_parameter.getTheta();
             params(Acts::eBoundQOverP) = track_parameter.getQOverP() / Acts::UnitConstants::GeV;
             params(Acts::eBoundTime)   = track_parameter.getTime() * Acts::UnitConstants::ns;
+            m_log->debug("Initial track QOverP: {}", params(Acts::eBoundQOverP));
 
             double charge = std::copysign(1., track_parameter.getQOverP());
 
@@ -194,14 +195,14 @@ namespace eicrecon {
             }
 
             // Construct a perigee surface as the target surface
-            auto pSurface = Acts::Surface::makeShared<const Acts::PerigeeSurface>(Acts::Vector3(0,0,0));
+            auto pSurface = Acts::Surface::makeShared<const Acts::PerigeeSurface>(Acts::Vector3(0,0,-3500));
 
             // Create parameters
             acts_init_trk_params.emplace_back(pSurface, params, cov, Acts::ParticleHypothesis::pion());
         }
 
         //// Construct a perigee surface as the target surface
-        auto pSurface = Acts::Surface::makeShared<Acts::PerigeeSurface>(Acts::Vector3{0., 0., 0.});
+        auto pSurface = Acts::Surface::makeShared<Acts::PerigeeSurface>(Acts::Vector3{0., 0., -3500.});
 
         ACTS_LOCAL_LOGGER(eicrecon::getSpdlogLogger("CKF", m_log, {"^No tracks found$"}));
 
@@ -273,6 +274,8 @@ namespace eicrecon {
 
         // Loop over seeds
         for (std::size_t iseed = 0; iseed < acts_init_trk_params.size(); ++iseed) {
+            m_log->debug("Track qOverP for seed {} before CKF: {}",
+                         iseed, acts_init_trk_params.at(iseed).parameters()[Acts::eBoundQOverP]);
             auto result =
                 (*m_trackFinderFunc)(acts_init_trk_params.at(iseed), options, acts_tracks);
 
@@ -284,8 +287,11 @@ namespace eicrecon {
             // Set seed number for all found tracks
             auto& tracksForSeed = result.value();
             for (auto& track : tracksForSeed) {
+              m_log->debug("Track qOverP for seed {} after CKF: {}",
+                           iseed, track.parameters()[Acts::eBoundQOverP]);
 
 #if Acts_VERSION_MAJOR >= 34
+#ifdef ACTS_SMOOTH_TRACK
                 auto smoothingResult = Acts::smoothTrack(m_geoctx, track, logger());
                 if (!smoothingResult.ok()) {
                     ACTS_ERROR("Smoothing for seed "
@@ -294,6 +300,9 @@ namespace eicrecon {
                     failed_tracks.push_back(track.index());
                     continue;
                 }
+                m_log->debug("Track qOverP for seed {} after smoothing: {}",
+                             iseed, track.parameters()[Acts::eBoundQOverP]);
+#endif
 
                 auto extrapolationResult = Acts::extrapolateTrackToReferenceSurface(
                     track, *pSurface, extrapolator, extrapolationOptions,
@@ -305,6 +314,8 @@ namespace eicrecon {
                     failed_tracks.push_back(track.index());
                     continue;
                 }
+                m_log->debug("Track qOverP for seed {} after extrapolation: {}",
+                             iseed, track.parameters()[Acts::eBoundQOverP]);
 #endif
 
                 seedNumber(track) = iseed;
@@ -378,6 +389,7 @@ namespace eicrecon {
                         ActsExamples::TrackParameters{track.referenceSurface().getSharedPtr(),
                                                       track.parameters(), track.covariance(),
                                                       track.particleHypothesis()}});
+          m_log->debug("Final track qOverP: {}", track.parameters()[Acts::eBoundQOverP]);
         }
 
         if (tips.empty()) {

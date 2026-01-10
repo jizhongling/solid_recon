@@ -30,6 +30,7 @@
 #include "extensions/jana/JOmniFactoryGeneratorT.h"
 #include "factories/meta/CollectionCollector_factory.h"
 #include "services/geometry/dd4hep/DD4hep_service.h"
+#include "SoLIDTrackSeeding_factory.h"
 
 //
 extern "C" {
@@ -142,14 +143,16 @@ void InitPlugin(JApplication *app) {
         app
     ));
 
-    app->Add(new JOmniFactoryGeneratorT<TrackSeeding_factory>(
+    // Replace the standard TrackSeeding with SoLIDTrackSeeding for GEM hits
+    app->Add(new JOmniFactoryGeneratorT<SoLIDTrackSeeding_factory>(
         "CentralTrackSeedingResults",
         {"CentralTrackingRecHits"},
         {"CentralTrackSeedingResults"},
         {},
         app
-        ));
+    ));
 
+    // Continue with CKF tracking using the SoLID seeds
     app->Add(new JOmniFactoryGeneratorT<CKFTracking_factory>(
         "CentralCKFTrajectories",
         {

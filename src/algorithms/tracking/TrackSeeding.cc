@@ -212,7 +212,7 @@ std::unique_ptr<edm4eic::TrackParametersCollection> eicrecon::TrackSeeding::make
       auto phi = atan2(vypos,vxpos);
 
       const float z0 = seed.z();
-      auto perigee = Acts::Surface::makeShared<Acts::PerigeeSurface>(Acts::Vector3(0,0,0));
+      auto perigee = Acts::Surface::makeShared<Acts::PerigeeSurface>(Acts::Vector3(0,0,-3500));
       Acts::Vector3 global(xypos.first, xypos.second, z0);
 
       //Compute local position at PCA
